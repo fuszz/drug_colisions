@@ -1,7 +1,7 @@
 Nazwa;Skladniki;Kolizje
 lek_1;a, b, c;d
 lek_2;a, b, d;e, f
-lek_3;f;a, b, c, d, e
+lek_3;f;d, e
 lek_5;f, b, c;d
 lek_7;d, b, d;e, f
 lek_67;f;a, b, c, d, e

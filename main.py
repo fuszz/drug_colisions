@@ -38,7 +38,34 @@ def zapisz_apteczke(apteczka: List[str]):
     apteczka_csv.close()
 
 # Funkcja do sprawdzania kolizji między lekami
-def sprawdz_kolizje(baza_lekow, leki):
+def sprawdz_kolizje(baza_lekow, apteczka, window):
+    roboczy_df = pd.DataFrame(columns=['Nazwa', 'Skladniki', 'Kolizje'])
+
+    # Tworzymy roboczy df
+    for lek in apteczka:
+        wiersz = baza_lekow[baza_lekow['Nazwa'] == lek].copy()
+        wiersz.reset_index(drop=True, inplace=True)
+        roboczy_df = roboczy_df._append(wiersz, ignore_index=True)
+
+    komunikat = ""
+
+    for i, lek1 in roboczy_df.iterrows():
+        for j, lek2 in roboczy_df.iterrows():
+            if i != j:  # Nie porównuj tego samego leku z samym sobą
+                skladniki_leku1 = set(lek1['Skladniki'])
+                kolizje_leku2 = set(lek2['Kolizje'])
+
+                # Sprawdź, czy składniki leku1 są w kolizjach leku2
+                kolizje_skladnikow = skladniki_leku1.intersection(kolizje_leku2)
+
+                if kolizje_skladnikow:
+                    komunikat += f"Kolizja między lekami {lek1['Nazwa']} i {lek2['Nazwa']} - Kolizyjne składniki: {', '.join(kolizje_skladnikow)}\n"
+
+    if komunikat != "":
+        sg.popup(komunikat, title='Komunikat kolizji', size = (500, 500))
+    else:
+        sg.popup("Nie znaleziono kolizji", title='Komunikat')
+
     return 0
 
 # GUI aplikacji
@@ -48,13 +75,12 @@ baza_lekow: pd.DateOffset = wczytaj_baze_lekow()  # Wczytanie bazy leków
 
 layout = [
     [sg.Text('Dodaj lek do swojej listy:')],
-    [sg.InputText(key='nowy_lek'), sg.Button('Dodaj')],
-    [sg.Listbox(values=apteczka, size=(30, 6), key='lista_lekow')],
-    [sg.Button('Usuń zaznaczony lek'), sg.Button('Sprawdź kolizje')],
-    [sg.Text('', size=(30, 2), key='komunikat')]
+    [sg.InputText(key='nowy_lek', size=(72,1)), sg.Button('Dodaj')],
+    [sg.Listbox(values=apteczka, size=(36, 15), key='lista_lekow'), sg.Text('', size=(36, 15), key='komunikat')],
+    [sg.Button('Usuń zaznaczony lek', size=(36,1)), sg.Button('Sprawdź kolizje', size=(36,1))],
 ]
 
-window = sg.Window('Wykrywanie kolizji leków', layout)
+window = sg.Window('Wykrywanie kolizji leków', layout, size=(600, 370))
 
 # Główna pętla aplikacji
 while True:
@@ -81,8 +107,6 @@ while True:
         else:
             window['komunikat'].update('Aby dodać lek, musisz wprowadzić jego nazwę.')
 
-
-
     if event == 'Usuń zaznaczony lek':
         wybrane_leki = values['lista_lekow']
         if wybrane_leki:
@@ -92,12 +116,7 @@ while True:
             zapisz_apteczke(apteczka)  # Zapisz listę leków do pliku po usunięciu leku
 
     if event == 'Sprawdź kolizje':
-        kolizje = sprawdz_kolizje(baza_lekow, apteczka)
-        if kolizje:
-            kolizje_info = '\n'.join([f'Kolizja: {x[0]} i {x[1]} - Kolizyjny składnik: {x[2]}' for x in kolizje])
-            window['komunikat'].update(kolizje_info)
-        else:
-            window['komunikat'].update('Brak kolizji')
+        kolizje = sprawdz_kolizje(baza_lekow, apteczka, window)
 
 window.close()
 
