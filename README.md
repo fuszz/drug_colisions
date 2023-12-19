@@ -34,4 +34,4 @@ Wyszukiwanie kolizji działa tak, że:
 Ibum koliduje z Nurofenem (nazwa_substancji)
 Nurofen koliduje z Ibumem (nazwa_substancji)
 
-OLAF jak będziesz robić bazę to przejrzyj, czy mozna powiedzieć, że relacja jest symetryczna, czy nie (tj. czy zawsze/zazwyczaj jest tak, że jak A koliduje z B poprzez subs. x, to B z A poprzez x. Wtedy można wyrzucić połowę sprawdzeń). 
+OLAF jak będziesz robić bazę to przejrzyj, czy mozna powiedzieć, że relacja jest symetryczna, czy nie (tj. czy zawsze/zazwyczaj jest tak, że jak A koliduje z B poprzez subs. x, to B z A poprzez x). Prosiłem chat o pomoc i przyjął takie założenie, pewnie tak jest ale nie zaszkodzi po nim sprawdzić :)
