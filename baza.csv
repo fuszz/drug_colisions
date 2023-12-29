@@ -1,0 +1,16 @@
+Nazwa;Skladniki;Kolizje
+Paracetamol;Paracetamol;Warfaryna
+Ibuprofen;Ibuprofen;Aspiryna
+Amoksycylina;Amoksycylina;Metotreksat
+Loratadyna;Loratadyna;Erytromycyna
+Metformina;Metformina;Jodowe środki kontrastowe
+Aspiryna;Kwas acetylosalicylowy;Ibuprofen
+Cetirizyna;Cetirizyna;Alkohol
+Amiodaron;Amiodaron;Grepfrut
+Simwastatyna;Simwastatyna;Grepfrut
+Lizynopryl;Lizynopryl;Spironolakton
+Amlodypina;Amlodypina;Grepfrut
+Diklofenak;Diklofenak;Aspiryna
+Klarytromycyna;Klarytromycyna;Warfaryna
+Omeprazol;Omeprazol;Klopidogrel
+Sertralina;Sertralina;Omeprazol

@@ -6,7 +6,7 @@ from typing import List
 # Funkcja do wczytywania bazy danych leków z pliku
 def wczytaj_baze_lekow():
     try:
-        baza_lekow = pd.read_csv('.baza.csv', sep=';')
+        baza_lekow = pd.read_csv('baza.csv', sep=';')
         #Przekształcenie kolumn Skladniki i Kolizje ze stringa na tablicę stringów oddzieloną znakami ,
         baza_lekow['Skladniki'] = baza_lekow['Skladniki'].str.split(',').apply(lambda x: [s.strip() for s in x] if isinstance(x, list) else [])
         baza_lekow['Kolizje'] = baza_lekow['Kolizje'].str.split(',').apply(lambda x: [s.strip() for s in x] if isinstance(x, list) else [])
