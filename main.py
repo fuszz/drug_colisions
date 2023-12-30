@@ -62,7 +62,7 @@ def sprawdz_kolizje(baza_lekow, apteczka, window):
                     komunikat += f"Kolizja między lekami {lek1['Nazwa']} i {lek2['Nazwa']} - Kolizyjne składniki: {', '.join(kolizje_skladnikow)}\n"
 
     if komunikat != "":
-        sg.popup(komunikat, title='Komunikat kolizji', size = (500, 500))
+        sg.popup(komunikat, title='Komunikat kolizji')
     else:
         sg.popup("Nie znaleziono kolizji", title='Komunikat')
 
