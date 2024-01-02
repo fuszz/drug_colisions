@@ -38,35 +38,25 @@ def zapisz_apteczke(apteczka: List[str]):
     apteczka_csv.close()
 
 # Funkcja do sprawdzania kolizji między lekami
-def sprawdz_kolizje(baza_lekow, apteczka, window):
+def sprawdz_kolizje(baza_lekow, apteczka):
     roboczy_df = pd.DataFrame(columns=['Nazwa', 'Skladniki', 'Kolizje'])
-
-    # Tworzymy roboczy df
     for lek in apteczka:
         wiersz = baza_lekow[baza_lekow['Nazwa'] == lek].copy()
         wiersz.reset_index(drop=True, inplace=True)
-        roboczy_df = roboczy_df._append(wiersz, ignore_index=True)
-
-    komunikat = ""
+        roboczy_df = pd.concat([roboczy_df, wiersz], ignore_index=True)
+    komunikaty_kolizji = []
 
     for i, lek1 in roboczy_df.iterrows():
         for j, lek2 in roboczy_df.iterrows():
-            if i != j:  # Nie porównuj tego samego leku z samym sobą
+            if i != j:
                 skladniki_leku1 = set(lek1['Skladniki'])
                 kolizje_leku2 = set(lek2['Kolizje'])
-
-                # Sprawdź, czy składniki leku1 są w kolizjach leku2
                 kolizje_skladnikow = skladniki_leku1.intersection(kolizje_leku2)
-
                 if kolizje_skladnikow:
-                    komunikat += f"Kolizja między lekami {lek1['Nazwa']} i {lek2['Nazwa']} - Kolizyjne składniki: {', '.join(kolizje_skladnikow)}\n"
+                    komunikat = f"Kolizja: {lek1['Nazwa']} i {lek2['Nazwa']} - Składniki: {', '.join(kolizje_skladnikow)}"
+                    komunikaty_kolizji.append(komunikat)
 
-    if komunikat != "":
-        sg.popup(komunikat, title='Komunikat kolizji')
-    else:
-        sg.popup("Nie znaleziono kolizji", title='Komunikat')
-
-    return 0
+    return komunikaty_kolizji
 
 # GUI aplikacji
 apteczka: List[str] = wczytaj_apteczke()  # Inicjalizacja listy leków pacjenta
@@ -116,7 +106,11 @@ while True:
             zapisz_apteczke(apteczka)  # Zapisz listę leków do pliku po usunięciu leku
 
     if event == 'Sprawdź kolizje':
-        kolizje = sprawdz_kolizje(baza_lekow, apteczka, window)
+        komunikaty_kolizji = sprawdz_kolizje(baza_lekow, apteczka)
+        if komunikaty_kolizji:
+            sg.popup("\n".join(komunikaty_kolizji), title='Komunikat kolizji')
+        else:
+            sg.popup("Nie znaleziono kolizji", title='Komunikat')
 
 window.close()
 
